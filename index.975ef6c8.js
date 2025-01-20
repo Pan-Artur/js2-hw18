@@ -609,10 +609,20 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getMoviesAPI", ()=>getMoviesAPI);
 var _layoutMovies = require("../layoutMovies");
 const getMoviesAPI = ()=>{
-    return fetch("http://localhost:3000/movies").then((data)=>data.json()).then((data)=>(0, _layoutMovies.createMarkupMovies)(data));
+    return fetch("https://js2-hw18.onrender.com/movies").then((data)=>data.json()).then((data)=>(0, _layoutMovies.createMarkupMovies)(data));
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../layoutMovies":"jkQ6p"}],"gkKU3":[function(require,module,exports,__globalThis) {
+},{"../layoutMovies":"jkQ6p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jkQ6p":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "createMarkupMovies", ()=>createMarkupMovies);
+const createMarkupMovies = (moviesData)=>{
+    const listEl = document.querySelector(".movies-list");
+    const markup = moviesData.map(({ title, genre, director, year })=>`<li class="movies-item"><h3 class="movies-title">${title}</h3><p class="movies-genre">${genre}</p><p class="movies-director">${director}</p><p class="movies-year">${year}</p></li>`).join("");
+    listEl.insertAdjacentHTML("beforeend", markup);
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -642,16 +652,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"jkQ6p":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "createMarkupMovies", ()=>createMarkupMovies);
-const createMarkupMovies = (moviesData)=>{
-    const listEl = document.querySelector(".movies-list");
-    const markup = moviesData.map(({ title, genre, director, year })=>`<li class="movies-item"><h3 class="movies-title">${title}</h3><p class="movies-genre">${genre}</p><p class="movies-director">${director}</p><p class="movies-year">${year}</p></li>`).join("");
-    listEl.insertAdjacentHTML("beforeend", markup);
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["9mu7C","8lqZg"], "8lqZg", "parcelRequire94c2")
+},{}]},["9mu7C","8lqZg"], "8lqZg", "parcelRequire94c2")
 
 //# sourceMappingURL=index.975ef6c8.js.map

@@ -1,2 +1,0 @@
-const e=e=>{let s=document.querySelector(".movies-list"),o=e.map(({title:e,genre:s,director:o,year:t})=>`<li class="movies-item"><h3 class="movies-title">${e}</h3><p class="movies-genre">${s}</p><p class="movies-director">${o}</p><p class="movies-year">${t}</p></li>`).join("");s.insertAdjacentHTML("beforeend",o)};console.log(fetch("http://localhost:3000/movies").then(e=>e.json()).then(s=>e(s)));
-//# sourceMappingURL=index.533bbca6.js.map

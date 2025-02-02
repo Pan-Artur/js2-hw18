@@ -597,29 +597,129 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"8lqZg":[function(require,module,exports,__globalThis) {
 var _renderPageJs = require("./js/renderPage.js");
-var _getMoviesAPIJs = require("./js/services/getMoviesAPI.js");
+var _additionMovieJs = require("./js/additionMovie.js");
+var _gettingMoviesJs = require("./js/gettingMovies.js");
+var _hiddingMoviesJs = require("./js/hiddingMovies.js");
+var _deletingMovieJs = require("./js/deletingMovie.js");
+var _editingMovieJs = require("./js/editingMovie.js");
+var _editingPartMovieJs = require("./js/editingPartMovie.js");
 
-},{"./js/renderPage.js":"7sjbv","./js/services/getMoviesAPI.js":"3qsxu"}],"7sjbv":[function(require,module,exports,__globalThis) {
+},{"./js/renderPage.js":"7sjbv","./js/additionMovie.js":"c49Tq","./js/gettingMovies.js":"8TW3p","./js/hiddingMovies.js":"7tUEp","./js/deletingMovie.js":"9aQ0V","./js/editingMovie.js":"96Zpn","./js/editingPartMovie.js":"2nRuN"}],"7sjbv":[function(require,module,exports,__globalThis) {
 var _getMoviesAPIJs = require("./services/getMoviesAPI.js");
-console.log((0, _getMoviesAPIJs.getMoviesAPI)());
+(0, _getMoviesAPIJs.getMoviesAPI)();
 
 },{"./services/getMoviesAPI.js":"3qsxu"}],"3qsxu":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getMoviesAPI", ()=>getMoviesAPI);
-var _layoutMovies = require("../layoutMovies");
+var _addMovieAPIJs = require("./addMovieAPI.js");
+var _removeDuplicatesJs = require("../removeDuplicates.js");
+var _deletingMovieJs = require("../deletingMovie.js");
+var _editingMovieJs = require("../editingMovie.js");
+var _editingPartMovieJs = require("../editingPartMovie.js");
+var _layoutMoviesJs = require("../layoutMovies.js");
 const getMoviesAPI = ()=>{
-    return fetch("https://js2-hw18.onrender.com/movies").then((data)=>data.json()).then((data)=>(0, _layoutMovies.createMarkupMovies)(data));
+    return fetch("http://localhost:3000/movies").then((data)=>data.json()).then((data)=>{
+        (0, _addMovieAPIJs.moviesList).length = 0;
+        (0, _addMovieAPIJs.moviesList).push(...data);
+        (0, _layoutMoviesJs.createMarkupMovies)(data);
+        (0, _editingPartMovieJs.editPartMovie)();
+        (0, _editingMovieJs.editMovie)();
+        (0, _deletingMovieJs.deleteMovie)();
+        (0, _removeDuplicatesJs.removeDuplicates)();
+    });
+}; // export const getMoviesAPI = async () => {
+ //   try {
+ //     return await fetch("http://localhost:3000/movies")
+ //       .then((data) => data.json())
+ //       .then((data) => {
+ //         moviesList.length = 0;
+ //         moviesList.push(...data);
+ //         removeDuplicates();
+ //       });
+ //   } catch (error) {
+ //     console.log(error.message);
+ //   }
+ // };
+
+},{"./addMovieAPI.js":"jCEAl","../removeDuplicates.js":"6PSnU","../deletingMovie.js":"9aQ0V","../layoutMovies.js":"jkQ6p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../editingMovie.js":"96Zpn","../editingPartMovie.js":"2nRuN"}],"jCEAl":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "moviesList", ()=>moviesList);
+parcelHelpers.export(exports, "addMovieAPI", ()=>addMovieAPI);
+var _removeDuplicatesJs = require("../removeDuplicates.js");
+let moviesList = [];
+const addMovieAPI = ()=>{
+    const movieToAdd = {
+        title: document.querySelector(".title").value,
+        genre: document.querySelector(".genre").value,
+        director: document.querySelector(".director").value,
+        year: document.querySelector(".year").value
+    };
+    const options = {
+        method: "POST",
+        body: JSON.stringify(movieToAdd),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    };
+    return fetch("http://localhost:3000/movies", options).then((data)=>data.json()).then((data)=>{
+        moviesList.push(data);
+        (0, _removeDuplicatesJs.removeDuplicates)();
+    });
+}; // export const addMovieAPI = async () => {
+ //   try {
+ //     const movieToAdd = {
+ //       title: document.querySelector(".title").value,
+ //       genre: document.querySelector(".genre").value,
+ //       director: document.querySelector(".director").value,
+ //       year: document.querySelector(".year").value,
+ //     };
+ //     const options = {
+ //       method: "POST",
+ //       body: JSON.stringify(movieToAdd),
+ //       headers: {
+ //         "Content-Type": "application/json; charset=UTF-8",
+ //       },
+ //     };
+ //     return await fetch(`http://localhost:3000/movies/${movieToAdd.id}`).then((data) => {
+ //       if (!data.ok) {
+ //         return fetch("http://localhost:3000/movies", options)
+ //           .then((data) => data.json())
+ //           .then((data) => {
+ //             moviesList.push(data);
+ //             removeDuplicates();
+ //           });
+ //       }
+ //     });
+ //   } catch(error) {
+ //     console.log(error.message)
+ //   }
+ // };
+
+},{"../removeDuplicates.js":"6PSnU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6PSnU":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "removeDuplicates", ()=>removeDuplicates);
+var _layoutMovies = require("./layoutMovies");
+var _addMovieAPI = require("./services/addMovieAPI");
+const removeDuplicates = ()=>{
+    const uniqueMovies = [];
+    for (const movie of (0, _addMovieAPI.moviesList))if (!uniqueMovies.some((uniqueMovie)=>Number(uniqueMovie.id) === Number(movie.id))) uniqueMovies.push(movie);
+    (0, _addMovieAPI.moviesList).length = 0;
+    (0, _addMovieAPI.moviesList).push(...uniqueMovies);
+    (0, _layoutMovies.createMarkupMovies)((0, _addMovieAPI.moviesList));
 };
 
-},{"../layoutMovies":"jkQ6p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jkQ6p":[function(require,module,exports,__globalThis) {
+},{"./layoutMovies":"jkQ6p","./services/addMovieAPI":"jCEAl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jkQ6p":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "createMarkupMovies", ()=>createMarkupMovies);
 const createMarkupMovies = (moviesData)=>{
     const listEl = document.querySelector(".movies-list");
-    const markup = moviesData.map(({ title, genre, director, year })=>`<li class="movies-item"><h3 class="movies-title">${title}</h3><p class="movies-genre">${genre}</p><p class="movies-director">${director}</p><p class="movies-year">${year}</p></li>`).join("");
-    listEl.insertAdjacentHTML("beforeend", markup);
+    listEl.innerHTML = "";
+    const markup = moviesData.map(({ id, title, genre, director, year })=>`<li id="${id}" class="movies-item"><h3 class="movies-title">${title}</h3><p class="movies-genre">${genre}</p><p class="movies-director">${director}</p><p class="movies-year">${year}</p><div class="movie-managment"><button type="button" class="button movie-button edit-button">Edit</button><button type="button" class="button movie-button edit-everything-button">Edit all</button><button type="button" class="button movie-button delete-button">Delete</button></div></li>`).join("");
+    listEl.innerHTML = markup;
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports,__globalThis) {
@@ -651,6 +751,252 @@ exports.export = function(dest, destName, get) {
         get: get
     });
 };
+
+},{}],"9aQ0V":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "deleteMovie", ()=>deleteMovie);
+var _deleteMovieAPI = require("./services/deleteMovieAPI");
+const deleteMovie = ()=>{
+    document.removeEventListener("click", deletingMovie);
+    document.addEventListener("click", deletingMovie);
+};
+const deletingMovie = (e)=>{
+    if (e.target.classList.contains("delete-button")) {
+        const movieItem = e.target.closest(".movies-item");
+        (0, _deleteMovieAPI.deleteMovieAPI)(movieItem.id).then(()=>{
+            movieItem.remove();
+        });
+    }
+};
+
+},{"./services/deleteMovieAPI":"88Uwq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"88Uwq":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "deleteMovieAPI", ()=>deleteMovieAPI);
+const deleteMovieAPI = (movieId)=>{
+    return fetch(`http://localhost:3000/movies/${movieId}`, {
+        method: "DELETE"
+    }).then((data)=>data).catch((error)=>console.log(error));
+}; // export const deleteMovieAPI = async (movieId) => {
+ //   try {
+ //     return await fetch(`http://localhost:3000/movies/${movieId}`, {
+ //       method: "DELETE",
+ //     }).then((data) => data);
+ //   } catch(error) {
+ //     console.log(error.message);
+ //   }
+ // };
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"96Zpn":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "editMovie", ()=>editMovie);
+parcelHelpers.export(exports, "openingEditModal", ()=>openingEditModal);
+var _editMovieAPI = require("./services/editMovieAPI");
+const editMovie = ()=>{
+    document.addEventListener("click", openingEditModal);
+};
+const openingEditModal = (e)=>{
+    if (e.target.classList.contains("edit-everything-button")) {
+        const modalEditEl = document.querySelector(".backdrop-edit");
+        const formEl = document.querySelector(".form-edit");
+        const editModalClose = document.querySelector(".modal-edit-close");
+        const movieItem = e.target.closest(".movies-item");
+        const movieId = movieItem.dataset.id;
+        modalEditEl.classList.remove("is-hidden");
+        formEl.elements.name.value = movieItem.querySelector(".movies-title").textContent;
+        formEl.elements.genre.value = movieItem.querySelector(".movies-genre").textContent;
+        formEl.elements.director.value = movieItem.querySelector(".movies-director").textContent;
+        formEl.elements.year.value = movieItem.querySelector(".movies-year").textContent;
+        const submitHandler = (event)=>{
+            event.preventDefault();
+            modalEditEl.classList.add("is-hidden");
+            const updatedMovie = {
+                title: formEl.elements.name.value,
+                genre: formEl.elements.genre.value,
+                director: formEl.elements.director.value,
+                year: formEl.elements.year.value
+            };
+            (0, _editMovieAPI.updateMovieAPI)(movieId, updatedMovie).then(()=>{
+                movieItem.querySelector(".movies-title").textContent = updatedMovie.title;
+                movieItem.querySelector(".movies-genre").textContent = updatedMovie.genre;
+                movieItem.querySelector(".movies-director").textContent = updatedMovie.director;
+                movieItem.querySelector(".movies-year").textContent = updatedMovie.year;
+            });
+            formEl.removeEventListener("submit", submitHandler);
+        };
+        formEl.addEventListener("submit", submitHandler);
+        editModalClose.addEventListener("click", ()=>{
+            modalEditEl.classList.add("is-hidden");
+            formEl.removeEventListener("submit", submitHandler);
+        });
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./services/editMovieAPI":"4MPw7"}],"4MPw7":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateMovieAPI", ()=>updateMovieAPI);
+const updateMovieAPI = (data, movieToUpdate)=>{
+    const options = {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    };
+    return fetch(`http://localhost:3000/movies/${movieToUpdate}`, options).then((data)=>data.json()).then((data)=>data).catch((error)=>console.log(error));
+}; // export const updateMovieAPI = async () => {
+ //   try {
+ //     const movieToUpdate = {
+ //       id: 7,
+ //       title: "Back to the Future",
+ //       genre: "Fantasy",
+ //       director: "Robert Zemeckis",
+ //       year: 1985,
+ //     };
+ //     const options = {
+ //       method: "PUT",
+ //       body: JSON.stringify(movieToUpdate),
+ //       headers: {
+ //         "Content-Type": "application/json; charset=UTF-8",
+ //       },
+ //     };
+ //     return await fetch("http://localhost:3000/movies/1", options)
+ //       .then((data) => data.json())
+ //       .then((updatedMovie) => {
+ //         const index = moviesList.findIndex((movie) => movie.id === updatedMovie.id);
+ //         if (index !== -1) {
+ //           moviesList[index] = { ...moviesList[index], ...updatedMovie }
+ //         } else {
+ //           moviesList.push(updatedMovie);
+ //         }
+ //         removeDuplicates();
+ //         createMarkupMovies(moviesList);
+ //       });
+ //   } catch(error) {
+ //     console.log(error.message)
+ //   }
+ // };
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2nRuN":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "editPartMovie", ()=>editPartMovie);
+parcelHelpers.export(exports, "openingEditPartModal", ()=>openingEditPartModal);
+var _editMoviePartAPI = require("./services/editMoviePartAPI");
+const editPartMovie = ()=>{
+    document.addEventListener("click", openingEditPartModal);
+};
+const openingEditPartModal = (e)=>{
+    if (e.target.classList.contains("edit-button")) {
+        const modalEditEl = document.querySelector(".backdrop-edit");
+        const formEl = document.querySelector(".form-edit");
+        const editModalClose = document.querySelector(".modal-edit-close");
+        const movieItem = e.target.closest(".movies-item");
+        const movieId = movieItem.dataset.id;
+        modalEditEl.classList.remove("is-hidden");
+        formEl.elements.name.value = movieItem.querySelector(".movies-title").textContent;
+        formEl.elements.genre.value = movieItem.querySelector(".movies-genre").textContent;
+        formEl.elements.director.value = movieItem.querySelector(".movies-director").textContent;
+        formEl.elements.year.value = movieItem.querySelector(".movies-year").textContent;
+        const submitHandler = (event)=>{
+            event.preventDefault();
+            modalEditEl.classList.add("is-hidden");
+            const updatedMovie = {
+                title: formEl.elements.name.value,
+                genre: formEl.elements.genre.value,
+                director: formEl.elements.director.value,
+                year: formEl.elements.year.value
+            };
+            (0, _editMoviePartAPI.updatePartMovieAPI)(movieId, updatedMovie).then(()=>{
+                movieItem.querySelector(".movies-title").textContent = updatedMovie.title;
+                movieItem.querySelector(".movies-genre").textContent = updatedMovie.genre;
+                movieItem.querySelector(".movies-director").textContent = updatedMovie.director;
+                movieItem.querySelector(".movies-year").textContent = updatedMovie.year;
+            });
+            formEl.removeEventListener("submit", submitHandler);
+        };
+        formEl.addEventListener("submit", submitHandler);
+        editModalClose.addEventListener("click", ()=>{
+            modalEditEl.classList.add("is-hidden");
+            formEl.removeEventListener("submit", submitHandler);
+        });
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./services/editMoviePartAPI":"djwU3"}],"djwU3":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updatePartMovieAPI", ()=>updatePartMovieAPI);
+const updatePartMovieAPI = (data, movieToUpdatePart)=>{
+    const options = {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    };
+    return fetch(`http://localhost:3000/movies/${movieToUpdatePart}`, options).then((data)=>data.json()).then((data)=>data).catch((error)=>console.log(error));
+}; // export const changeMovieAPI = async () => {
+ //   try {
+ //     const movieToChange = {
+ //       title: "The Knight and Day",
+ //       director: "James Mangold",
+ //     };
+ //     const options = {
+ //       method: "PATCH",
+ //       body: JSON.stringify(movieToChange),
+ //       headers: {
+ //         "Content-Type": "application/json; charset=UTF-8",
+ //       },
+ //     };
+ //     return await fetch(`http://localhost:3000/movies/5`, options)
+ //       .then((data) => data.json())
+ //       .then((data) => {
+ //         console.log(data);
+ //         removeDuplicates();
+ //         createMarkupMovies(moviesList);
+ //       });
+ //   } catch(error) {
+ //     console.log(error.message);
+ //   }
+ // };
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c49Tq":[function(require,module,exports,__globalThis) {
+var _addMovieAPI = require("./services/addMovieAPI");
+const addMovie = ()=>{
+    const addMovieButtonEl = document.querySelector(".add-movie");
+    addMovieButtonEl.addEventListener("click", ()=>{
+        (0, _addMovieAPI.addMovieAPI)();
+    });
+};
+addMovie();
+
+},{"./services/addMovieAPI":"jCEAl"}],"8TW3p":[function(require,module,exports,__globalThis) {
+const getMovies = ()=>{
+    const getMoviesButtonEl = document.querySelector(".get-movies");
+    const hideMoviesButtonEl = document.querySelector(".hide-movies");
+    const moviesListEl = document.querySelector(".movies-list");
+    getMoviesButtonEl.addEventListener("click", ()=>{
+        moviesListEl.classList.remove("is-hidden");
+    });
+    hideMoviesButtonEl.addEventListener("click", ()=>{
+        moviesListEl.classList.add("is-hidden");
+    });
+};
+getMovies();
+
+},{}],"7tUEp":[function(require,module,exports,__globalThis) {
+const hideMovies = ()=>{
+    const hideMoviesButtonEl = document.querySelector(".hide-movies");
+    const moviesListEl = document.querySelector(".movies-list");
+    hideMoviesButtonEl.addEventListener("click", ()=>{
+        moviesListEl.classList.add("is-hidden");
+    });
+};
+hideMovies();
 
 },{}]},["9mu7C","8lqZg"], "8lqZg", "parcelRequire94c2")
 

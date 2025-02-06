@@ -3,6 +3,10 @@ ul {
   padding: 0;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 .movies-list {
   display: flex;
   flex-wrap: wrap;

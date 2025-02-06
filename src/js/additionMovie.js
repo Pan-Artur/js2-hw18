@@ -1,10 +1,14 @@
 import { addMovieAPI } from "./services/addMovieAPI";
 
-const addMovie = () => {
+const addMovie = async () => {
     const addMovieButtonEl = document.querySelector(".add-movie");
 
-    addMovieButtonEl.addEventListener("click", () => {
-        addMovieAPI();
+    addMovieButtonEl.addEventListener("click", async () => {
+        try {
+            await addMovieAPI();
+        } catch (error) {
+            console.error(error);
+        }
     });
 };
 

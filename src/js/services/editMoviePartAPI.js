@@ -1,41 +1,18 @@
-export const updatePartMovieAPI = (data, movieToUpdatePart) => {
-  const options = {
-    method: "PATCH",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-    },
-  };
+export const updatePartMovieAPI = async (data, movieToUpdatePart) => {
+  try {
+    const options = {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+    };
 
-  return fetch(`http://localhost:3000/movies/${movieToUpdatePart}`, options)
-    .then((data) => data.json())
-    .then((data) => data)
-    .catch((error) => console.log(error));
+    const response = await fetch(`http://localhost:3000/movies/${movieToUpdatePart}`, options);
+
+    return await response.json();
+  } catch(error) {
+    console.error(error);
+  }
 };
 
-// export const changeMovieAPI = async () => {
-//   try {
-//     const movieToChange = {
-//       title: "The Knight and Day",
-//       director: "James Mangold",
-//     };
-  
-//     const options = {
-//       method: "PATCH",
-//       body: JSON.stringify(movieToChange),
-//       headers: {
-//         "Content-Type": "application/json; charset=UTF-8",
-//       },
-//     };
-  
-//     return await fetch(`http://localhost:3000/movies/5`, options)
-//       .then((data) => data.json())
-//       .then((data) => {
-//         console.log(data);
-//         removeDuplicates();
-//         createMarkupMovies(moviesList);
-//       });
-//   } catch(error) {
-//     console.log(error.message);
-//   }
-// };

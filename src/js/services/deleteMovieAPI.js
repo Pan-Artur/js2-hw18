@@ -1,17 +1,11 @@
-export const deleteMovieAPI = (movieId) => {
-  return fetch(`http://localhost:3000/movies/${movieId}`, {
-    method: "DELETE",
-  })
-    .then((data) => data)
-    .catch((error) => console.log(error));
-};
+export const deleteMovieAPI = async (movieId) => {
+  try {
+    const response = await fetch(`http://localhost:3000/movies/${movieId}`, {
+      method: "DELETE",
+    });
 
-// export const deleteMovieAPI = async (movieId) => {
-//   try {
-//     return await fetch(`http://localhost:3000/movies/${movieId}`, {
-//       method: "DELETE",
-//     }).then((data) => data);
-//   } catch(error) {
-//     console.log(error.message);
-//   }
-// };
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
